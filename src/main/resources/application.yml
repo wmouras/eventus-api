@@ -1,0 +1,30 @@
+eventus-api:
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: eventus-api
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  datasource:
+    enabled: true
+    url: jdbc:mariadb://localhost:3306/
+    driverClassName: org.mariadb.jdbc.Driver
+    username: root
+    password: admin
+    tomcat:
+      access-to-underlying-connection-allowed: true
+  flyway:
+    enabled: false
+    url: jdbc:mariadb://localhost:3306/
+    user: root
+    password: admin
+    locations: classpath:db/migration/common,classpath:db/migration/oracle
+    schemas: evento
+    table: FLYWAY_SCHEMA_HISTORY
+    baseline-on-migrate: false
+    out-of-order: true
+  jpa:
+    show-sql: true
+    generate-ddl: false
