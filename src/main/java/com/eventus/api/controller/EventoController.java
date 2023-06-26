@@ -31,20 +31,17 @@ public class EventoController {
     public void delete(@Valid @NotNull @PathVariable("id") Long id) {
         eventoService.delete(id);
     }
-
     @PutMapping("/{id}")
     @ApiOperation("Update ")
     public void update(@Valid @NotNull @PathVariable("id") Long id,
                        @Valid @RequestBody EventoDTO dto) {
         eventoService.update(id, dto);
     }
-
     @GetMapping("/{id}")
     @ApiOperation("Recuperar pelo ID ")
     public EventoDTO getById(@Valid @NotNull @PathVariable("id") Long id) {
         return eventoService.getById(id);
     }
-
     @GetMapping
     @ApiOperation("Consulta ")
     public Page<EventoDTO> query(@Valid EventoDTO dto) {
