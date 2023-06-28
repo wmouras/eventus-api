@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Api(tags = "")
 @Validated
@@ -44,7 +46,7 @@ public class EventoController {
     }
     @GetMapping
     @ApiOperation("Consulta ")
-    public Page<EventoDTO> query(@Valid EventoDTO dto) {
+    public List<EventoDTO> query(@RequestBody EventoDTO dto) {
         return eventoService.query(dto);
     }
 }

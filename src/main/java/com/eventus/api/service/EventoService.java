@@ -3,36 +3,38 @@ package com.eventus.api.service;
 import com.eventus.api.domain.Evento;
 import com.eventus.api.domain.dto.EventoDTO;
 import com.eventus.api.repository.EventoRepository;
+import jakarta.persistence.NoResultException;
 import lombok.AllArgsConstructor;
+import org.bouncycastle.asn1.cms.OtherRecipientInfo;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @AllArgsConstructor
 @Service
 public class EventoService {
 
-    private final EventoRepository eventoRepository;
+    private final EventoRepository repository;
 
     public Long save(EventoDTO dto) {
 
         Evento bean = new Evento();
         BeanUtils.copyProperties(dto, bean);
-        bean = eventoRepository.save(bean);
+        bean = repository.save(bean);
         return bean.getIdEvento();
     }
 
     public void delete(Long id) {
-        eventoRepository.deleteById(id);
+        repository.deleteById(id);
     }
 
     public void update(Long id, EventoDTO dto) {
         Evento bean = requireOne(id);
         BeanUtils.copyProperties(dto, bean);
-        eventoRepository.save(bean);
+        repository.save(bean);
     }
 
     public EventoDTO getById(Long id) {
@@ -40,8 +42,13 @@ public class EventoService {
         return toDTO(original);
     }
 
-    public Page<EventoDTO> query(EventoDTO dto) {
-        throw new UnsupportedOperationException();
+    public List<EventoDTO> query(EventoDTO eventoDTO) {
+
+        ModelMapper mapper = new ModelMapper();
+        List<Evento> lista = repository.findAllByDsEventoContainingIgnoreCaseAndNoEventoContainingIgnoreCase(eventoDTO.getDsEvento(), eventoDTO.getNoEvento())
+                .orElseThrow(NoResultException::new);
+
+        return lista.stream().map(e -> mapper.map(e, EventoDTO.class)).toList();
     }
 
     private EventoDTO toDTO(Evento original) {
@@ -51,7 +58,7 @@ public class EventoService {
     }
 
     private Evento requireOne(Long id) {
-        return eventoRepository.findById(id)
+        return repository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Resource not found: " + id));
     }
 }

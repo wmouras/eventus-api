@@ -30,6 +30,6 @@ public class Evento implements Serializable {
 
     @Column(name = "dt_evento")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDate dtEvento;
+    private LocalDateTime dtEvento;
 
 }
