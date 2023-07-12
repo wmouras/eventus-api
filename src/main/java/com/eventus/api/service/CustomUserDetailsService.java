@@ -3,11 +3,13 @@ package com.eventus.api.service;
 import com.eventus.api.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import org.springframework.security.core.userdetails.User;
+import com.eventus.api.domain.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 @Builder
 @Service
@@ -19,7 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
-        if (user == null) {
+        if (Objects.isNull(user)) {
             throw new UsernameNotFoundException("Usuário não encontrado");
         }
         return user;

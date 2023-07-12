@@ -1,7 +1,7 @@
 package com.eventus.api.service;
 
-import com.eventus.api.domain.User;
 import com.eventus.api.domain.dto.UserDTO;
+import com.eventus.api.domain.User;
 import com.eventus.api.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -16,11 +16,11 @@ public class UserService {
 
     private final UserRepository repository;
 
-    public Long save(UserDTO vO) {
-        User bean = new User();
-        BeanUtils.copyProperties(vO, bean);
-        bean = repository.save(bean);
-        return bean.getId();
+    public User save(UserDTO vO) {
+        User user = new User();
+        BeanUtils.copyProperties(vO, user);
+        return repository.save(user);
+
     }
 
     public void delete(Long id) {
