@@ -1,7 +1,7 @@
 package com.eventus.api.controller;
 
-import com.eventus.api.domain.dto.UsuarioDTO;
-import com.eventus.api.service.UsuarioService;
+import com.eventus.api.domain.dto.UserDTO;
+import com.eventus.api.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import jakarta.validation.Valid;
@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/usuario")
 public class UsuarioController {
 
-    private UsuarioService usuarioService;
+    private final UserService usuarioService;
 
     @PostMapping
     @ApiOperation("Save ")
-    public String save(@Valid @RequestBody UsuarioDTO vO) {
+    public String save(@Valid @RequestBody UserDTO vO) {
         return usuarioService.save(vO).toString();
     }
 
@@ -35,19 +35,19 @@ public class UsuarioController {
     @PutMapping("/{id}")
     @ApiOperation("Update ")
     public void update(@Valid @NotNull @PathVariable("id") Long id,
-                       @Valid @RequestBody UsuarioDTO vO) {
+                       @Valid @RequestBody UserDTO vO) {
         usuarioService.update(id, vO);
     }
 
     @GetMapping("/{id}")
     @ApiOperation("Retrieve by ID ")
-    public UsuarioDTO getById(@Valid @NotNull @PathVariable("id") Long id) {
+    public UserDTO getById(@Valid @NotNull @PathVariable("id") Long id) {
         return usuarioService.getById(id);
     }
 
     @GetMapping
     @ApiOperation("Retrieve by query ")
-    public Page<UsuarioDTO> query(@Valid UsuarioDTO vO) {
+    public Page<UserDTO> query(@Valid UserDTO vO) {
         return usuarioService.query(vO);
     }
 }

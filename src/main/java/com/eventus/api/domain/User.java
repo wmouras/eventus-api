@@ -1,27 +1,39 @@
 package com.eventus.api.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.context.annotation.Role;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-@Data
+import java.io.Serial;
+import java.util.Collection;
+
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "user")
-public class User {
+public class User implements UserDetails {
+
+    @Serial
+    private static final long serialVersionUID = 564654L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private String username;
-    private String name;
-    private String email;
-    private boolean enabled;
     private String password;
+    private String roles;
+    private boolean accountNonLocked;
+    private boolean accountNonExpired;
+    private boolean credentialsNonExpired;
+    private boolean enabled;
 
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
 
 }
