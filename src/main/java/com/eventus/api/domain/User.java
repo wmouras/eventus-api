@@ -2,7 +2,6 @@ package com.eventus.api.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.context.annotation.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -32,8 +31,8 @@ public class User implements UserDetails {
     private boolean credentialsNonExpired;
     private boolean enabled;
 
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
-
 }

@@ -1,13 +1,18 @@
 package com.eventus.api.config;
 
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.SecurityBuilder;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
@@ -26,10 +31,13 @@ public class SecurityConfig implements WebSecurityConfigurer {
     @Qualifier("customUserDetailsService")
     private final UserDetailsService userDetailsService;
 
+    private final AuthenticationProviderComponente authProvider;
+
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .formLogin(form -> form
                         .loginPage("/login")
+                        .defaultSuccessUrl("/home", true)
                         .permitAll()
                 );
 
@@ -39,30 +47,8 @@ public class SecurityConfig implements WebSecurityConfigurer {
 
     @Bean
     UserDetailsManager users(DataSource dataSource) {
-        UserDetails user = builder()
-                .username("user")
-                .password("{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW")
-                .roles("USER")
-                .accountNonLocked(true)
-                .accountNonExpired(true)
-                .credentialsNonExpired(true)
-                .enabled(true)
-                .build();
-        UserDetails admin = builder()
-                .username("admin")
-                .password("{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW")
-                .roles("ADMIN")
-                .accountNonLocked(true)
-                .accountNonExpired(true)
-                .credentialsNonExpired(true)
-                .enabled(true)
-                .build();
-        JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
-        users.createUser(user);
-        users.createUser(admin);
-        return users;
+        return null;
     }
-
     @Override
     public void init(SecurityBuilder builder) throws Exception {
 
@@ -72,4 +58,13 @@ public class SecurityConfig implements WebSecurityConfigurer {
     public void configure(SecurityBuilder builder) throws Exception {
 
     }
+
+    @Bean
+    public AuthenticationManager authManager(HttpSecurity http) throws Exception {
+        AuthenticationManagerBuilder authenticationManagerBuilder =
+                http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder.authenticationProvider(authProvider);
+        return authenticationManagerBuilder.build();
+    }
+
 }
