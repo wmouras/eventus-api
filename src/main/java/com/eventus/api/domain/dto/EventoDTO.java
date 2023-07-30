@@ -25,7 +25,7 @@ public class EventoDTO implements Serializable {
     private Long id;
     private String noEvento;
     private String dsEvento;
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
+    @JsonFormat()
     private LocalDateTime dtEvento;
 
 }
