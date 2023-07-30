@@ -4,26 +4,31 @@ import com.eventus.api.domain.dto.EventoDTO;
 import com.eventus.api.service.EventoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.SwaggerDefinition;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @AllArgsConstructor
 @Api(tags = "")
 @Validated
 @RestController
+@SwaggerDefinition(tags = {
+        @io.swagger.annotations.Tag(name = "Evento", description = "Evento")
+})
 @RequestMapping("/evento")
 public class EventoController {
 
     private final EventoService eventoService;
 
-    @PostMapping
     @ApiOperation("Salvar ")
+    @PostMapping
     public String save(@Valid @RequestBody EventoDTO dto) {
         return eventoService.save(dto).toString();
     }

@@ -3,6 +3,7 @@ package com.eventus.api.service;
 import com.eventus.api.domain.Evento;
 import com.eventus.api.domain.dto.EventoDTO;
 import com.eventus.api.repository.EventoRepository;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.NoResultException;
 import lombok.AllArgsConstructor;
 import org.bouncycastle.asn1.cms.OtherRecipientInfo;
@@ -15,6 +16,7 @@ import java.util.NoSuchElementException;
 
 @AllArgsConstructor
 @Service
+@JsonInclude
 public class EventoService {
 
     private final EventoRepository repository;
@@ -24,7 +26,7 @@ public class EventoService {
         Evento bean = new Evento();
         BeanUtils.copyProperties(dto, bean);
         bean = repository.save(bean);
-        return bean.getIdEvento();
+        return bean.getId();
     }
 
     public void delete(Long id) {

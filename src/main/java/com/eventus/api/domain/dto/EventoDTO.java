@@ -22,10 +22,10 @@ public class EventoDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 113123123L;
 
-    private Long idEvento;
+    private Long id;
     private String noEvento;
     private String dsEvento;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime dtEvento;
 
 }

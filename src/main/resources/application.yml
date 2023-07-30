@@ -16,6 +16,7 @@ spring:
       access-to-underlying-connection-allowed: true
     driver-class-name: org.mariadb.jdbc.Driver
   flyway:
+
     enabled: false
     url: jdbc:mariadb://localhost:3306/
     user: root
@@ -29,13 +30,12 @@ spring:
     show-sql: true
     generate-ddl: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     properties:
       hibernate:
         format_sql:
     database: mysql
     database-platform: org.hibernate.dialect.MariaDBDialect
-
 logging:
   level:
     root: info
