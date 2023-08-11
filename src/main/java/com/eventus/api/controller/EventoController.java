@@ -12,7 +12,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @AllArgsConstructor
@@ -38,20 +37,23 @@ public class EventoController {
     public void delete(@Valid @NotNull @PathVariable("id") Long id) {
         eventoService.delete(id);
     }
+
     @PutMapping("/{id}")
     @ApiOperation("Update ")
     public void update(@Valid @NotNull @PathVariable("id") Long id,
                        @Valid @RequestBody EventoDTO dto) {
         eventoService.update(id, dto);
     }
+
     @GetMapping("/{id}")
     @ApiOperation("Recuperar pelo ID ")
     public EventoDTO getById(@Valid @NotNull @PathVariable("id") Long id) {
         return eventoService.getById(id);
     }
-    @GetMapping
+
+    @GetMapping("/listar/{dsEvento}/{noEvento}/{dtEvento}")
     @ApiOperation("Consulta ")
-    public List<EventoDTO> query(@RequestBody EventoDTO dto) {
-        return eventoService.query(dto);
+    public List<EventoDTO> query(@PathVariable String dsEvento, @PathVariable String noEvento, @PathVariable LocalDateTime dtEvento) {
+        return eventoService.query(dsEvento, noEvento, dtEvento);
     }
 }

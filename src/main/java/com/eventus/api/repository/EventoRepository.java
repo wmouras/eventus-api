@@ -12,4 +12,6 @@ public interface EventoRepository extends JpaRepository<Evento, Long> {
 
     Optional<List<Evento>> findAllByDsEventoContainingIgnoreCaseAndNoEventoContainingIgnoreCase(String dsEvento, String noEvento);
 
+    List<Evento> findAll();
+
 }

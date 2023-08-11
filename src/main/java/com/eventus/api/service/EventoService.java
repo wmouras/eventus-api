@@ -4,29 +4,28 @@ import com.eventus.api.domain.Evento;
 import com.eventus.api.domain.dto.EventoDTO;
 import com.eventus.api.repository.EventoRepository;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.NoResultException;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.bouncycastle.asn1.cms.OtherRecipientInfo;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 @AllArgsConstructor
 @Service
+@Transactional
 @JsonInclude
 public class EventoService {
 
     private final EventoRepository repository;
+    private final ModelMapper mapper = new ModelMapper();
 
     public Long save(EventoDTO dto) {
-
-        Evento bean = new Evento();
-        BeanUtils.copyProperties(dto, bean);
-        bean = repository.save(bean);
-        return bean.getId();
+        return repository.save(mapper.map(dto, Evento.class)).getId();
     }
 
     public void delete(Long id) {
@@ -34,9 +33,7 @@ public class EventoService {
     }
 
     public void update(Long id, EventoDTO dto) {
-        Evento bean = requireOne(id);
-        BeanUtils.copyProperties(dto, bean);
-        repository.save(bean);
+        repository.save(mapper.map(dto, Evento.class));
     }
 
     public EventoDTO getById(Long id) {
@@ -44,19 +41,19 @@ public class EventoService {
         return toDTO(original);
     }
 
-    public List<EventoDTO> query(EventoDTO eventoDTO) {
+    public List<EventoDTO> query(String dsEvento, String noEvento, LocalDateTime dtEvento) {
 
-        ModelMapper mapper = new ModelMapper();
-        List<Evento> lista = repository.findAllByDsEventoContainingIgnoreCaseAndNoEventoContainingIgnoreCase(eventoDTO.getDsEvento(), eventoDTO.getNoEvento())
-                .orElseThrow(NoResultException::new);
+        List<Evento> lista = repository.findAll().stream()
+                .filter(e -> (Objects.isNull(e.getDtEvento()) || e.getDtEvento().equals(dtEvento))
+                        && (Objects.isNull(e.getDsEvento()) || e.getDsEvento().contains(dsEvento))
+                         && (Objects.isNull(e.getNoEvento()) || e.getNoEvento().contains(noEvento)))
+                .toList();
 
         return lista.stream().map(e -> mapper.map(e, EventoDTO.class)).toList();
     }
 
-    private EventoDTO toDTO(Evento original) {
-        EventoDTO bean = new EventoDTO();
-        BeanUtils.copyProperties(original, bean);
-        return bean;
+    private EventoDTO toDTO(Evento evento) {
+        return mapper.map(evento, EventoDTO.class);
     }
 
     private Evento requireOne(Long id) {
